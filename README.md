@@ -364,6 +364,8 @@ for (step = 1; step < length; step *= 2) {
         return dummyHead.next;
     }
 ```
+
+
 * 二叉搜索树
 
 二叉查找树（英语：Binary Search Tree），也称为 二叉搜索树、有序二叉树（Ordered Binary Tree）或排序二叉树（Sorted Binary Tree），是指一棵空树或者具有下列性质的二叉树：
@@ -373,6 +375,7 @@ for (step = 1; step < length; step *= 2) {
 - 节点的右子树仅包含键大于节点键的节点。
 
 - 左右子树也必须是二叉搜索树。
+
 
 * 树
 
