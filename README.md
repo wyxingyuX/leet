@@ -437,6 +437,41 @@ for (step = 1; step < length; step *= 2) {
     }
 ```
 
+141. 环形链表
+
+给定一个链表，判断链表中是否有环。
+
+解析：使用快慢指针检测是否有换
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        if (head == nullptr) {
+            return false;
+        }
+        ListNode * slow = head;
+        ListNode * fast = head->next;
+        while (fast && fast->next) {
+            if (slow == fast) {
+                return true;
+            }
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+        return false;
+    }
+};
+```
+
 
 
 
