@@ -376,6 +376,64 @@ for (step = 1; step < length; step *= 2) {
 
 * 树
 
+105. 从前序与中序遍历序列构造二叉树
+
+根据一棵树的前序遍历与中序遍历构造二叉树。
+
+注意:
+你可以假设树中没有重复的元素。
+
+例如，给出
+
+前序遍历 preorder = [3,9,20,15,7]
+
+中序遍历 inorder = [9,3,15,20,7]
+
+返回如下的二叉树：
+
+>    3
+>   / \
+>  9  20
+>    /  \
+>   15   7
+
+解析：
+首先要知道一个结论，前序/后序+中序序列可以唯一确定一棵二叉树，所以自然而然可以用来建树。
+
+看一下前序和中序有什么特点，前序1,2,4,7,3,5,6,8 ，中序4,7,2,1,5,3,8,6；
+
+有如下特征：
+
+前序：[根结点，左子树结点，右子树结点]；
+
+中序：[左子树结点，根结点，右子树结点]，
+
+前序中左起第一位是根结点root，我们可以据此找到中序中根结点的位置rootin；继而可得出左子树结点个数为rootin；
+
+可递归构造此树：
+
+```cpp
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if (preorder.size() == 0 || inorder.size() == 0) {
+            return nullptr;
+        }
+        int root_val = preorder[0];
+        TreeNode* p_root = new TreeNode(root_val);
+        vector<int>::iterator it = find(inorder.begin(), inorder.end(), root_val);
+        int r_dis_in = distance(inorder.begin(), it);
+        
+        vector<int> l_preorder(preorder.begin() + 1, preorder.begin() + 1 + r_dis_in);
+        vector<int> l_inorder(inorder.begin(), inorder.begin() + r_dis_in);
+        p_root->left = buildTree(l_preorder, l_inorder);
+
+        vector<int> r_preorder(preorder.begin() + 1 + r_dis_in, preorder.end());
+        vector<int> r_inorder(inorder.begin() + r_dis_in + 1, inorder.end());
+        p_root->right = buildTree(r_preorder, r_inorder);
+        
+        return p_root;
+    }
+```
+
 
 
 
