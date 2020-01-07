@@ -538,6 +538,43 @@ public:
     }
 ```
 
+179. 最大数
+
+给定一组非负整数，重新排列它们的顺序使之组成一个最大的整数。
+
+示例 1:
+
+输入: [10,2]
+
+输出: 210
+
+示例 2:
+
+输入: [3,30,34,5,9]
+
+输出: 9534330
+
+说明: 输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+
+解析：
+数组中元素e1,e2, 若 e2e1 > e1e2，则e2应在e1之前，才能组成最终的大数；对数组中所有元素，按上述原则进行排序，最终便得到了最大数。
+
+```cpp
+    string largestNumber(vector<int>& nums) {
+        sort(nums.begin(), nums.end(), [](int& a, int &b) {
+            string sa = to_string(a);
+            string sb = to_string(b);
+            return sa + sb > sb + sa;
+        });
+        string res;
+        bool nonzero = false;
+        for (int e : nums) {
+            res += to_string(e);
+            if (e) nonzero = true;
+        }
+        return nonzero ? res : "0";
+    }
+```
 
 
 
