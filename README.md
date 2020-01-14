@@ -93,6 +93,54 @@ vector<vector<int>> fourSum(vector<int>& nums, int target) {
 
 ```
 
+46. 全排列
+
+给定一个没有重复数字的序列，返回其所有可能的全排列。
+
+示例:
+
+输入: [1,2,3]
+输出:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+
+解析：
+递归方式求解数组元素的全排列：
+从s到e数组元素的全排列：
+1. 若数组1个元素(s==e)，全排列就是它自己
+2. 否则，遍历s到e数组元素, 第i趟全排列：i元素作为首元素 + s-1到e数组的全排列。
+
+```cpp
+vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> ans;
+        if (nums.size() == 0) {
+           return ans; 
+        }
+        permutation(nums, 0, nums.size() - 1, ans);
+        return ans;
+    }
+    void permutation(vector<int> nums, int s, int e, vector<vector<int>> &output) {
+        //若数组1个元素，全排列就是它自己：
+        if (s == e) {
+            output.push_back(nums);
+        }
+        // s 到 e 的数组元素的全排列：
+        // 遍历数组元素, 第i趟全排列：该元素作为首元素 + s-1到e数组的全排列。
+        for (int i = s; i <= e; i++) {
+           swap(nums[i], nums[s]);
+           permutation(nums, s + 1, e, output);
+           swap(nums[i], nums[s]);
+        }
+    }
+```
+
+
 11. 盛最多水的容器
 
 给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
