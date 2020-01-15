@@ -140,6 +140,53 @@ vector<vector<int>> permute(vector<int>& nums) {
     }
 ```
 
+31. 下一个排列
+
+实现获取下一个排列的函数，算法需要将给定数字序列重新排列成字典序中下一个更大的排列。
+
+如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）。
+
+必须原地修改，只允许使用额外常数空间。
+
+以下是一些例子，输入位于左侧列，其相应输出位于右侧列。
+1,2,3 → 1,3,2
+3,2,1 → 1,2,3
+1,1,5 → 1,5,1
+
+解析：
+题意是：找到给定数字列表的下一个字典排列（即找出这个数组排序出的所有数中，刚好比当前数大的那个数）
+首先，对于任何降序排列，都没有可能的下一个更大的排列，题意说对于这种排列直接返回升序排列。
+那么，非降序排列a[s,e]是我们主要处理的对象：
+非降序排列中，如何找到比该排列更大的排列？
+其应该是从右往左扫描找到首次破坏升序性的位置j，(即从右往左扫描，找到a[j] > a[j-1]的位置，此时a[j+1:e]是个升序排列) 
+然后将j位置的元素和右侧升序序列第一个比它的元素交换，
+再将 j 位置的右侧进行降序排列即可。
+
+```cpp
+void nextPermutation(vector<int>& nums) {
+    if (nums.size() <= 1) return;
+    int j = nums.size() - 1;
+    while (j - 1 >= 0 && nums[j-1] >= nums[j]) j--;
+    if (j == 0) {
+        for (int i = 0; i < nums.size() / 2; ++i) {
+            swap(nums[i], nums[nums.size() - 1 - i]);
+        }
+    } else {
+        int r = nums.size() - 1;
+        while (r >= j) {
+            if (nums[r] > nums[j-1]) break;
+            --r;
+        }
+        swap(nums[r], nums[j-1]);
+        int r_mid_cnt =(nums.size() - j) /2;
+        int i = 0;
+        while (i < r_mid_cnt) {
+            swap(nums[j+i], nums[nums.size() - 1 - i]);
+            ++i;
+        }
+    }
+    }
+```
 
 11. 盛最多水的容器
 
