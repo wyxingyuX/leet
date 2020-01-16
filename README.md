@@ -155,11 +155,17 @@ vector<vector<int>> permute(vector<int>& nums) {
 
 解析：
 题意是：找到给定数字列表的下一个字典排列（即找出这个数组排序出的所有数中，刚好比当前数大的那个数）
+
 首先，对于任何降序排列，都没有可能的下一个更大的排列，题意说对于这种排列直接返回升序排列。
+
 那么，非降序排列a[s,e]是我们主要处理的对象：
+
 非降序排列中，如何找到比该排列更大的排列？
+
 其应该是从右往左扫描找到首次破坏升序性的位置j，(即从右往左扫描，找到a[j] > a[j-1]的位置，此时a[j+1:e]是个升序排列) 
+
 然后将j位置的元素和右侧升序序列第一个比它的元素交换，
+
 再将 j 位置的右侧进行降序排列即可。
 
 ```cpp
@@ -186,6 +192,68 @@ void nextPermutation(vector<int>& nums) {
         }
     }
     }
+```
+
+39. 组合总和
+
+给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+
+candidates 中的数字可以无限制重复被选取。
+
+说明：
+
+所有数字（包括 target）都是正整数。
+解集不能包含重复的组合。 
+示例 1:
+
+输入: candidates = [2,3,6,7], target = 7,
+所求解集为:
+[
+  [7],
+  [2,2,3]
+]
+示例 2:
+
+输入: candidates = [2,3,5], target = 8,
+所求解集为:
+[
+  [2,2,2,2],
+  [2,3,3],
+  [3,5]
+]
+
+解析：
+回溯法，待解析...
+```cpp
+class Solution {
+
+private:
+    vector<int> candidates;
+    vector<vector<int>> res;
+    vector<int> path;
+public:
+    void DFS(int start, int target) {
+            if (target == 0) {
+                res.push_back(path);
+                return;
+            }
+            for (int i = start;
+                i < candidates.size(); i++) {
+		if (target - candidates[i] < 0) break; // 该条路径无效，不再往下搜索。
+                path.push_back(candidates[i]);
+                DFS(i, target - candidates[i]);
+                path.pop_back();
+            }
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        std::sort(candidates.begin(), candidates.end());
+        this->candidates = candidates;
+        DFS(0, target);
+
+        return res;
+    }
+};
 ```
 
 11. 盛最多水的容器
