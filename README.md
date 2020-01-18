@@ -623,6 +623,39 @@ for (step = 1; step < length; step *= 2) {
     }
 ```
 
+* 动态规划
+
+53. 最大子序和
+给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
+
+示例:
+
+输入: [-2,1,-3,4,-1,2,1,-5,4],
+
+输出: 6
+
+解释: 连续子数组 [4,-1,2,1] 的和最大，为 6。
+
+解析：
+扫描数组元素S，每个时刻 t 都计算max_continues_sum_t：以t时刻为结束点的连续子数组(S[t-k,...,t])的最大和。
+数组扫描完，会有N 个max_continues_sum_t，其中最大的即为整个数组的最大子序和。
+```cpp
+    int maxSubArray(vector<int>& nums) {
+        if(nums.size() == 0) return 0;
+        int res = nums[0];
+        int last_max_continuos_sum = 0; // 记录以当前时刻t为结束点的连续子数组(s[t-k,...,t])的最大和。 
+        for (int i = 0; i < nums.size(); ++i) {
+            if (last_max_continuos_sum > 0) { //s[i-k, .. i-1] 的子数组和为正，和k时刻元素连接起来，会有正向收益，可作为k时刻的连续子数组。
+                last_max_continuos_sum += nums[i];
+            } else { //s[i-k, .. i-1] 的子数组和为负，若和k时刻元素连接起来，会有负向收益，因此 k 时刻不和前面的数组相连接。
+                last_max_continuos_sum = nums[i];
+            }
+            res = max(res, last_max_continuos_sum);
+        }
+        return res;
+    }
+```
+
 
 * 二叉搜索树
 
