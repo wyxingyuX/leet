@@ -626,6 +626,7 @@ for (step = 1; step < length; step *= 2) {
 * 动态规划
 
 53. 最大子序和
+
 给定一个整数数组 nums ，找到一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
 
 示例:
@@ -656,6 +657,81 @@ for (step = 1; step < length; step *= 2) {
     }
 ```
 
+79. 单词搜索
+
+给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+示例:
+
+board =
+[
+
+  ['A','B','C','E'],
+  
+  ['S','F','C','S'],
+  
+  ['A','D','E','E']
+  
+]
+
+给定 word = "ABCCED", 返回 true.
+
+给定 word = "SEE", 返回 true.
+
+给定 word = "ABCB", 返回 false.
+
+解析：
+```cpp
+ bool exist(vector<vector<char>>& board, string word) {
+        if (board.size() <=0) {
+            return false;
+        }
+        int n = board.size();
+        int m = board[0].size();
+        //记录目前已被占用的网格点(防止一个网格点被重复使用)
+        vector<vector<bool>> masked(n, vector<bool>(m, false));
+        //每个网格点都可以朝四个方向搜索：下，左，上，右； 方向顺序无要求
+        vector<vector<int>> directions = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}}; 
+        //对board每个位置都尝试搜索，看能不能找到 word
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (search_word(board, i, j, word, 0, masked, directions) == true) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    //从board 的(i,j)位置，按direction限制的方向搜索 word[index:-1]
+    bool search_word(vector<vector<char>>& board, int i, int j, string & word, int index, vector<vector<bool>>& masked, vector<vector<int>>& directions) {
+        //递归停止条件
+        if (word.size() - 1 == index) {
+            return board[i][j] == word[index];
+        }
+        int n = board.size();
+        int m = board[0].size();
+        // （i,j）网格点匹配了word[index]，再继续往下搜索
+        if (board[i][j] == word[index]) {
+            // 先mask（i,j）, 若最终搜不到，再还原
+            masked[i][j] = true;
+            //深度优先，四个方向都可尝试搜索
+            for (vector<int> direction : directions) {
+                int try_i = i + direction[0] ;
+                int tyr_j = j + direction[1];
+                //尝试的下一个位置(try_i,tyr_j)合法，且当前未被占用, 若从该位置开始能搜到 word[index+1:-1]（递归search_word），则返回 true；否则，继续尝试其他方向搜索。
+                if (try_i < n && try_i >=0 &&
+                    tyr_j < m && tyr_j >=0 &&
+                    !masked[try_i][tyr_j] &&
+                    search_word(board, try_i, tyr_j, word, index + 1, masked, directions))
+                    return true;
+            }
+            masked[i][j] = false;
+        }
+        return false;
+    }
+```
 
 * 二叉搜索树
 
