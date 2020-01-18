@@ -256,6 +256,48 @@ public:
 };
 ```
 
+50. Pow(x, n)
+
+实现 pow(x, n) ，即计算 x 的 n 次幂函数。
+
+示例 1:
+
+输入: 2.00000, 10
+输出: 1024.00000
+示例 2:
+
+输入: 2.10000, 3
+输出: 9.26100
+示例 3:
+
+输入: 2.00000, -2
+输出: 0.25000
+解释: 2-2 = 1/22 = 1/4 = 0.25
+说明:
+
+-100.0 < x < 100.0
+n 是 32 位有符号整数，其数值范围是 [−231, 231 − 1] 。
+
+解析：
+```cpp
+double fastPow(double x, int n) {
+        if (n == 0) {
+            return 1.0;
+        }
+        double half = fastPow(x, n/2);
+        if (n % 2 == 0) {
+            return half * half;
+        } else {
+            return half * half * x;
+        }
+    }
+    double myPow(double x, int n) {
+        int abs_n = n >= 0 ? n:-n;
+        double res = fastPow(x, n);
+        return n >= 0? res:1/res;
+    }
+```
+
 11. 盛最多水的容器
 
 给定 n 个非负整数 a1，a2，...，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0)。找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
