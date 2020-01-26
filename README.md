@@ -733,6 +733,61 @@ board =
     }
 ```
 
+5. 最长回文子串
+
+给定一个字符串 s，找到 s 中最长的回文子串。你可以假设 s 的最大长度为 1000。
+
+示例 1：
+
+输入: "babad"
+
+输出: "bab"
+
+注意: "aba" 也是一个有效答案。
+
+示例 2：
+
+输入: "cbbd"
+
+输出: "bb"
+
+解析:
+
+```cpp
+string longestPalindrome(string s) {
+        if (s.empty()) return "";
+        int left = 0;
+        int right = 0;
+        for (int i = 0; i < s.size(); i++) {
+            //尝试以 i 为中心进行扩展
+            int len1 = expandAroundCenter(s, i, i);
+            //尝试以 i,i+1中间位置为中心进行扩展
+            int len2 = expandAroundCenter(s, i, i + 1);
+            //取最长的扩展
+            int len = max(len1, len2);
+            if (len > right - left) {
+                left = i - (len -1) / 2;
+                right = i + len / 2;
+            }
+        }
+        //cout<<left<<endl;
+        //cout<<right<<endl;
+        return s.substr(left, right - left + 1);
+    }
+    int expandAroundCenter(string & s, int left, int right) {
+        if (left > right && right < s.size()) return 0;
+        int l = left;
+        int r = right;
+        while (l >=0 && r < s.size() && s[l] == s[r]) {
+            --l;
+            ++r;
+        }
+        //实际字符串长度。r, l为实际位置的下一个位置, 故实际长度为：r - l + 1 -2
+        return r - l - 1;
+    }
+```
+
+
 * 二叉搜索树
 
 二叉查找树（英语：Binary Search Tree），也称为 二叉搜索树、有序二叉树（Ordered Binary Tree）或排序二叉树（Sorted Binary Tree），是指一棵空树或者具有下列性质的二叉树：
