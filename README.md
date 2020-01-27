@@ -873,6 +873,42 @@ public int climbStairs(int n) {
     }
 ```
 
+300. 最长上升子序列
+
+给定一个无序的整数数组，找到其中最长上升子序列的长度。
+
+示例:
+
+输入: [10,9,2,5,3,7,101,18]
+
+输出: 4 
+
+解释: 最长的上升子序列是 [2,3,7,101]，它的长度是 4。
+
+说明:
+
+可能会有多种最长上升子序列的组合，你只需要输出对应的长度即可。
+
+你算法的时间复杂度应该为 O(n2) 。
+
+解析：
+
+```cpp
+ int lengthOfLIS(vector<int>& nums) {
+        if (nums.size() <= 0) return 0;
+        //dp[i]:第i个字符作为结束字符的最长上升子序列长度
+        vector<int> dp(nums.size(), 1);
+        for (int i = 1; i < nums.size(); ++i) {
+            for (int j = 0; j < i; ++j) {
+                if (nums[i] > nums[j]) {
+                    dp[i] = max(dp[i], dp[j] + 1);
+                }
+            }
+        }
+        return *max_element(dp.begin(), dp.end());
+    }
+```
+
 
 * 二叉搜索树
 
