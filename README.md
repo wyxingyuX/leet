@@ -1205,3 +1205,84 @@ public:
         return rev;
     }
 ```
+
+60. 第k个排列
+
+给出集合 [1,2,3,…,n]，其所有元素共有 n! 种排列。
+
+按大小顺序列出所有排列情况，并一一标记，当 n = 3 时, 所有排列如下：
+
+"123"
+"132"
+"213"
+"231"
+"312"
+"321"
+给定 n 和 k，返回第 k 个排列。
+
+说明：
+
+给定 n 的范围是 [1, 9]。
+给定 k 的范围是[1,  n!]。
+示例 1:
+
+输入: n = 3, k = 3
+输出: "213"
+
+示例 2:
+
+输入: n = 4, k = 9
+输出: "2314"
+
+解析：
+```cpp
+    string getPermutation(int n, int k) {
+         /**
+        可以用数学的方法来解, 因为数字都是从1开始的连续自然数, 排列出现的次序可以推
+        算出来, 对于n=4, k=15 找到k=15排列的过程:
+
+        确定第一位:
+            k = 14(从0开始计数)
+            index = k / (n-1)! = 2, 说明第15个数的第一位是3 
+            更新k
+            k = k - index*(n-1)! = 2
+        确定第二位:
+            k = 2
+            index = k / (n-2)! = 1, 说明第15个数的第二位是2
+            更新k
+            k = k - index*(n-2)! = 0
+        确定第三位:
+            k = 0
+            index = k / (n-3)! = 0, 说明第15个数的第三位是1
+            更新k
+            k = k - index*(n-3)! = 0
+        确定第四位:
+            k = 0
+            index = k / (n-4)! = 0, 说明第15个数的第四位是4
+        最终确定n=4时第15个数为3214 
+        **/
+        string res = "";
+        vector<int> candidates;
+        //分母的阶乘数
+        int factorials[n + 1] = {0};
+        factorials[0] = 1;
+        int fact = 1;
+        for (int i = 1; i <= n; ++i) {
+            candidates.push_back(i);
+            fact *= i;
+            factorials[i] = fact;
+        }
+        k -= 1;
+        int index = 0;
+        for (int i= n-1; i >= 0; --i) {
+            // 计算候选数字的index
+            index = k / factorials[i];
+            res += to_string(candidates[index]);
+            candidates.erase(candidates.begin() + index);
+            k -= index * factorials[i];
+        }
+        return res;
+    }
+```
+
+
