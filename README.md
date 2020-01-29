@@ -1287,4 +1287,54 @@ public:
 
 * 回溯算法
 
+22. 括号生成
 
+给出 n 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且有效的括号组合。
+
+例如，给出 n = 3，生成结果为：
+
+[
+  "((()))",
+  "(()())",
+  "(())()",
+  "()(())",
+  "()()()"
+]
+
+解析：
+
+```cpp
+  /*
+    对解空间进行dfs+减枝
+    1. 当前左右括号都有大于 0 个可以使用的时候，才产生分支；
+    2. 产生左分支的时候，只看当前是否还有左括号可以使用；
+    3. 产生右分支的时候，还受到左分支的限制，右边剩余可以使用的括号数量一定得在严格大于左边剩余的数量的时候，才可以产生分支；
+    4. 在左边和右边剩余的括号数都等于 0的时候结算。
+    */
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        dfs(res, "", n, n);
+        return res;
+    }
+    void dfs(vector<string> & res, string str, int left_remain, int right_remain) {
+        //在左边和右边剩余的括号数都等于 0的时候结算。
+        if (left_remain == 0 && right_remain == 0) {
+            res.push_back(str);
+            return ;
+        }
+        //越界条件、肯定不合法括号(当前字符 右括号多于左括号) 进行剪枝
+        if (left_remain > right_remain || left_remain < 0 || right_remain < 0) return;
+        
+        //允许产生左分支的条件：当前还有左括号可以使用 。(即剪枝不合法左分支)
+        if (left_remain > 0) {
+            //左分支 dfs
+            dfs(res, str + "(", left_remain - 1, right_remain);
+        }
+        //允许产生右分支的条件：右边剩余可以使用的括号数量一定得在严格大于左边剩余的数量。(即剪枝不合法右分支)
+        if (left_remain < right_remain) { 
+            //右分支 dfs
+            dfs(res, str + ")", left_remain, right_remain - 1);
+        }
+        return ;
+    }
+```
