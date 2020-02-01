@@ -1393,5 +1393,56 @@ S 仅由数字和字母组成。
     }
 ```
 
+77. 组合
+
+给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+
+示例:
+
+输入: n = 4, k = 2
+
+输出:
+
+[
+  [2,4],
+  [3,4],
+  [2,3],
+  [1,2],
+  [1,3],
+  [1,4],
+]
+
+解析:
+```cpp
+class Solution {
+private:
+    vector<vector<int>> res;
+public:
+    vector<vector<int>> combine(int n, int k) {
+        if (n <=0 || k <=0) return res;
+        if (k > n) k = n;
+        vector<int> prev;
+        findCombinations(n, k , 1, prev);
+        return res;
+    }
+    void findCombinations(int n, int k, int begin, vector<int>& prev) {
+        //dfs 已到叶子节点
+        if (prev.size() == k) {
+            res.push_back(prev);
+            return;
+        }
+        //dfs + 回溯
+        // i 的极限值满足： n - i = (k - pre.size() - 1)。
+        // 【关键】n - i 是闭区间 [i,n] 的有效长度。
+        // k - pre.size() - 1是剩下还要寻找的数的个数。
+        for (int i = begin; i <= n - (k - prev.size() - 1); ++i) {
+            prev.push_back(i);
+            findCombinations(n, k, i + 1, prev);
+            prev.pop_back();
+        }
+        return ;
+    }
+};
+```
 
 
